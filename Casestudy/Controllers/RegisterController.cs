@@ -3,10 +3,12 @@ using Casestudy.DAL;
 using Casestudy.DAL.DAO;
 using Casestudy.DAL.DomainClasses;
 using Casestudy.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Casestudy.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RegisterController : ControllerBase
@@ -16,6 +18,7 @@ namespace Casestudy.Controllers
         {
             _db = context;
         }
+        [AllowAnonymous]
         [HttpPost]
         [Produces("application/json")]
         public async Task<ActionResult<CustomerHelper>> Index(CustomerHelper helper)

@@ -1,10 +1,12 @@
 ﻿using Casestudy.DAL;
 using Casestudy.DAL.DAO;
 using Casestudy.DAL.DomainClasses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Casestudy.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductController : ControllerBase

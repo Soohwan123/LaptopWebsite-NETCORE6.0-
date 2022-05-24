@@ -8,9 +8,11 @@ using Casestudy.DAL.DomainClasses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Casestudy.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Casestudy.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
@@ -22,6 +24,7 @@ namespace Casestudy.Controllers
             _db = context;
             this.configuration = config;
         }
+        [AllowAnonymous]
         [HttpPost]
         [Produces("application/json")]
         public async Task<ActionResult<CustomerHelper>> Index(CustomerHelper helper)
