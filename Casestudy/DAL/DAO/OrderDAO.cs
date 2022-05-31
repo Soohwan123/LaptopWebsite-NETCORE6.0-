@@ -47,9 +47,10 @@ namespace Casestudy.DAL.DAO
                         }
                         else
                         {
-                            oItem.Product!.QtyOnHand = 0;
                             oItem.QtySold = oItem.Product!.QtyOnHand;
-                            oItem.QtyBackOrdered = selection.Qty - oItem.Product!.QtyOnHand;
+                            oItem.Product!.QtyOnBackOrder += (selection.Qty - oItem.Product!.QtyOnHand);
+                            oItem.QtyBackOrdered += (selection.Qty - oItem.Product!.QtyOnHand);
+                            oItem.Product!.QtyOnHand = 0;
                             oItem.QtyOrdered = selection.Qty;
                         }
 
