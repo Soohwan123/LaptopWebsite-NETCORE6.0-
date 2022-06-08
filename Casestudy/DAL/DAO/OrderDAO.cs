@@ -1,5 +1,6 @@
 ﻿using Casestudy.DAL.DomainClasses;
 using Casestudy.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace Casestudy.DAL.DAO
 {
@@ -25,7 +26,7 @@ namespace Casestudy.DAL.DAO
                     // calculate the totals and then add the order row to the table
                     foreach (OrderSelectionHelper selection in selections)
                     {
-                        order.OrderAmount += selection.Item!.MSRP * selection.Qty ;
+                        order.OrderAmount += selection.Item!.MSRP * selection.Qty;
                     }
 
                     await _db.Orders!.AddAsync(order);
@@ -73,5 +74,39 @@ namespace Casestudy.DAL.DAO
             }
             return orderId;
         }
+
+        public async Task<List<Order>> GetAll(int id)
+        {
+            return await _db.Orders!.Where(order => order.CustomerId == id).ToListAsync<Order>();
+        }
+
+        public async Task<List<OrderDetailsHelper>> GetOrderDetails(int oid, string email)
+        {
+            Customer? customer = _db.Customers!.FirstOrDefault(customer => customer.Email == email);
+            Order? order = _db.Orders!.FirstOrDefault(order => order.Id == oid);
+            List<OrderDetailsHelper> allDetails = new();
+            // LINQ way of doing INNER JOINS
+            var results = from o in _db.Orders
+                          join oli in _db.OrderLineItems! on o.Id equals oli.OrderId
+                          join p in _db.Products! on oli.ProductId equals p.Id
+                          where (o.CustomerId == customer!.Id && o.Id == oid)
+                          select new OrderDetailsHelper
+                          {
+                              OrderId = o.Id,
+                              ProductId = oli.ProductId,
+                              CustomerId = customer!.Id,
+                              ProductName = p.ProductName,
+                              OrderLineItemId = oli.Id,
+                              QtyOrdered = oli.QtyOrdered,
+                              QtySold = oli.QtySold,
+                              QtyBackOrdered = oli.QtyBackOrdered,
+                              SellingPrice = p.MSRP * oli.QtyOrdered,                   
+                              DateCreated = order!.OrderDate.ToString("yyyy/MM/dd - hh:mm tt")
+                          };
+            allDetails = await results.ToListAsync();
+            return allDetails;
+        }
     }
+
+
 }
