@@ -11,6 +11,6 @@ namespace Casestudy.DAL
         public virtual DbSet<Customer>? Customers { get; set; }
         public virtual DbSet<Order>? Orders { get; set; }
         public virtual DbSet<OrderLineItem>? OrderLineItems { get; set; }
-
+        public virtual DbSet<Branch>? Branches { get; set; }
     }
 }

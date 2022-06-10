@@ -39,7 +39,7 @@ namespace Casestudy.Controllers
             return retVal;
         }
 
-        [AllowAnonymous]
+
         [Route("{email}")]
         [HttpGet]
         public async Task<ActionResult<List<Order>>> List(string email)
@@ -52,7 +52,7 @@ namespace Casestudy.Controllers
             return orders;
         }
 
-        [AllowAnonymous]
+
         [Route("{orderid}/{email}")]
         [HttpGet]
         public async Task<ActionResult<List<OrderDetailsHelper>>> GetOrderDetails(int orderid, string email)
